@@ -6,6 +6,10 @@ const CommonSchema = {
     ParamsId: Joi.object().keys({
         id:Joi.string()
     }),
+
+    BulkDeleteIds: Joi.object().keys({
+        ids:Joi.array()
+    }),
     
     Pagination: Joi.object().keys({
         search:Joi.string().optional(),

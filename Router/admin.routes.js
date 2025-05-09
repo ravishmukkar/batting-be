@@ -64,11 +64,11 @@ router.post("/forgotpassword", ValidateRequest(AdminAuthSchema.ForgotPassword, "
 router.post("/UpdatePassword/:token",  CatchAsync(AdminAuthController.ResetForgotPassword))
 
 
-
 router.post("/designation", AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.DESIGNATION.id,"POST"), ValidateRequest(AdminSchema.AddDesignation, "body"), CatchAsync(DesigController.Add));
 router.get("/designation", AdminAuth, ValidateRequest(CommonSchema.Pagination, "query"),CatchAsync(DesigController.GetAll));
 router.patch("/designation/:id", AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.DESIGNATION.id,"PATCH"), ValidateRequest(CommonSchema.ParamsId, "params") ,ValidateRequest(AdminSchema.EditDesignation, "body") , CatchAsync(DesigController.Edit));
 router.delete("/designation/:id", AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.DESIGNATION.id,"DELETE"), ValidateRequest(CommonSchema.ParamsId, "params"), CatchAsync(DesigController.Delete));
+router.delete("/bulk-designation-delete", AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.DESIGNATION.id,"DELETE"), ValidateRequest(CommonSchema.BulkDeleteIds, "body"), CatchAsync(DesigController.BulkDeleteDesignations));
 
 router.post("/privilege", AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.PRIVILEGES.id,"POST"), CatchAsync(AdminController.AddPrivilege));
 router.get("/privilege/:user_id", AdminAuth, CatchAsync(AdminController.GetAllPrivilege));

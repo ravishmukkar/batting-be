@@ -3,6 +3,7 @@ const designations = require("./designation");
 const user = require("./user.model");
 const privileges = require("./privilege.model");
 const email = require("./email");
+const adminAuditTrails = require("./adminAuditTrail.model");
 
 module.exports = {
     adminDetails,
@@ -10,4 +11,5 @@ module.exports = {
     user,
     privileges,
     email,
+    adminAuditTrails
 };

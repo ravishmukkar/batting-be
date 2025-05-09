@@ -28,6 +28,12 @@ const DesigController = {
     await CreateAuditTrail(req,data,CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.DESIGNATION.value);
     ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
   },
+
+  BulkDeleteDesignations: async (req, res) => {
+    const data = await AdminService.BulkDeleteDesignations(req.body.ids);
+    await CreateAuditTrail(req,data,CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.DESIGNATION.value);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
  
 };
 

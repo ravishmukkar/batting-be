@@ -58,7 +58,6 @@ const AdminService = {
 
     existingUser.token.push(token);
     existingUser.last_login = new Date();
-    console.log(existingUser)
     await AdminAuthDal.UpdateAdmin({ _id: existingUser._id }, existingUser);
 
     return {token: token,_id:existingUser._id, role: existingUser.admin_type };
@@ -74,6 +73,7 @@ const AdminService = {
   ForgotPassword: async (data) => {
     const { email, phone } = data;
     let projection = {};
+
   
     if (email && phone) {
       projection = { $or: [{ email }, { phone }] };
@@ -82,7 +82,8 @@ const AdminService = {
     } else if (phone) {
       projection = { phone };
     }
-  
+
+
     const user = await AdminAuthDal.GetAdmin(projection);
     if (!user) {
       throw new ApiError(CONSTANTS_MESSAGES.USER_NOT_FOUND, StatusCodes.NOT_FOUND);
@@ -149,7 +150,6 @@ const AdminService = {
       throw new ApiError(CONSTANTS_MESSAGES.USER_NOT_FOUND, StatusCodes.NOT_FOUND);
     }
 
-    console.log(existingUser)
 
     const updatedUser = await AdminAuthDal.UpdateAdmin({_id}, body);
     return updatedUser;
@@ -194,7 +194,7 @@ const AdminService = {
     return await DesigDal.CreateDesig(data);
   },
   GetAllDesig: async (data) => {
-    const { search, page=1, pageSize=10, sortBy="name", sortOrder="-1" } = data;
+    const { search, page=1, pageSize=10, sortBy="createdAt", sortOrder="-1" } = data;
     const offset = (page - 1) * pageSize;
     const sortObject = {};
     let searchQuery;
@@ -230,6 +230,7 @@ const AdminService = {
   },
 
   DeleteDesig: async (_id) => await DesigDal.DeleteDesig( {_id, id: null }),
+  BulkDeleteDesignations: async (ids) => await DesigDal.BulkDeleteDesignations(ids)
   
 };
 

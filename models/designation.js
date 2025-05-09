@@ -26,6 +26,7 @@ const defaultDesignations = Object.values(CONSTANTS.DESIGNATIONS).map(designatio
 
 const initializeDesignations = async () => {
   try {
+
     const count = await Designations.countDocuments();
     if (count === 0) {
       await Designations.insertMany(defaultDesignations);
