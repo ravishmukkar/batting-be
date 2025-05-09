@@ -1,0 +1,104 @@
+const CONSTANTS = {
+  REGEX: {
+      EMAIL: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+      NUMBER:/^\d+$/,
+      PHONE: /^[0-9]{10,13}$/,
+      PHONE_INDIAN: /^\+91[0-9]{10}$/,
+      COUNTRY_CODE: /^(\+?\d{1,3}|\d{1,4})$/,
+      FILE_TYPE: /^[A-Za-z]+(,[A-Za-z]+)*$/,
+      NAME:/^[a-zA-Z0-9 ._/&@-]+$/,
+      PERSON_NAME:/^[a-zA-Z .]+$/,
+      TEST_LISTS: /^(?:(?:[a-zA-Z0-9&\-_/\"'() ]+),)*(?:[a-zA-Z0-9&\-_/\"'() ]+)$/,
+      PINCODE:  /^[1-9][0-9]{5}$/,
+  },
+
+ 
+  SUPERADMIN : 1,
+  ADMIN : 2,
+  USER  : 3,
+
+
+  KEY_TYPE: {
+    EMAIL: 0,
+    PHONE: 1
+  },
+
+ 
+  GENDER: {
+      MALE: 1,
+      FEMALE: 2,
+      OTHER: 3
+  },
+  USER_ROLES:{
+    SUPERADMIN: 1,
+    ADMIN: 2,
+    USER : 3
+  },
+  
+  FILE_SIZE:{
+    MIN:10,
+    MAX:204800,
+  },
+
+  
+  STATUS: {
+    ACTIVE: 1,
+    INACTIVE: 0
+  },
+  MODULE_TYPE : {
+    ADMIN: 1,
+    GENERAL: 2,
+  },
+
+  ADMIN_TYPE: {
+      ADMIN: 1,
+      APPROVER: 2,
+      FINANCE: 3
+  },
+
+  
+  PRIVILEGE : {
+    PROGRAMME : {
+      ADMIN : {
+        DESIGNATION : { id:1 , value:"Designation Master"},
+        USER : { id:2 , value:"Users Master"},
+        CORPORATE :{ id:3 , value:"Corporate Master"},
+        CORPORATE_EMPLOYEE :{ id:4 , value:"Corporate Subscriber Master"},
+        PLANS : { id:5 , value:"Plans Master"},
+        TESTS : { id:6 , value:"Test Master"},
+        DOCTORS : { id:7 , value:"Doctors Master"},
+        COUPONS : { id:8 , value:"Coupons Master"},
+        TC : { id:9 , value:"Terms & Conditions Master"} ,
+        SYSTEM : { id:10 , value:"System Settings Master"},
+        PRIVILEGES : { id:11 , value:"Privileges Master"},
+        HEALTH_CHECKUP_PLANS : { id:12 , value:"Health Checkup Plan Master"},
+        SPECIALIZATION : { id:13 , value:"Docotrs Specialization"},
+        AUDIT_LOGS : { id:30 , value:"Audit Logs"},
+        LOGIN_LOGS : { id:31 , value:"Login History"},
+      },
+      GENERAL : {
+        APPROVAL : { id:20 , value:"Approval"},
+        CLAIMS : { id:21 , value:"Claims"}
+      }
+    }},
+
+  DESIGNATIONS : {
+    1: { internal_id: 1, name: "MANAGER",  value: "Manager" },
+    2: { internal_id: 2, name: "MANAGEMENT", value: "Management" },
+    3: { internal_id: 3, name: "VERIFIER", value: "Verifier" },
+    4: { internal_id: 4, name: "FINANCE",  value: "Finance" },
+  },
+
+  
+  // PASSWORD_VALIDATION_REGEX: new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"),
+  PASSWORD_VALIDATION_REGEX: new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#_])[A-Za-z\\d@$!%*?&#_]{8,}$"),
+
+  VERIFIER_ID:"667d424bfb991cc88c45409f",
+  MANAGER_ID:"667d427dfb991cc88c4540c5",
+  FINANCER_ID:"667d4261fb991cc88c4540b2",
+
+  DEFAULT_PASSWORD: "OPDSURE2024"
+
+}
+
+module.exports = CONSTANTS
