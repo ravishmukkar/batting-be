@@ -21473,3 +21473,13 @@
 ::ffff:127.0.0.1 - - [09/May/2025:20:14:49 +0000] "GET /api/v1/admin/designation?page=1&pageSize=10&sortBy=designation&sortOrder=-1 HTTP/1.1" 304 -
 ::ffff:127.0.0.1 - - [09/May/2025:20:14:49 +0000] "GET /api/v1/admin/designation?page=1&pageSize=10&sortBy=designation&sortOrder=1 HTTP/1.1" 304 -
 ::ffff:127.0.0.1 - - [09/May/2025:20:15:15 +0000] "GET /api/v1/admin/designation?page=1&pageSize=10&sortBy=designation&sortOrder=1 HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [09/May/2025:20:15:24 +0000] "GET /api/v1/admin/get-profile HTTP/1.1" 200 254
+::ffff:127.0.0.1 - - [09/May/2025:20:15:24 +0000] "GET /api/v1/admin/get-profile HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [09/May/2025:20:15:24 +0000] "GET /api/v1/admin/designation?page=1&pageSize=10&sortBy=createdAt&sortOrder=-1 HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [09/May/2025:20:15:24 +0000] "GET /api/v1/admin/designation?page=1&pageSize=10&sortBy=createdAt&sortOrder=-1 HTTP/1.1" 200 1153
+::ffff:127.0.0.1 - - [09/May/2025:20:15:26 +0000] "GET /api/v1/admin/designation?page=1&pageSize=10&sortBy=createdAt&sortOrder=-1 HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [09/May/2025:20:15:26 +0000] "GET /api/v1/admin/designation?page=1&pageSize=10&sortBy=createdAt&sortOrder=1 HTTP/1.1" 200 1153
+::ffff:127.0.0.1 - - [09/May/2025:20:15:28 +0000] "GET /api/v1/admin/designation?page=1&pageSize=10&sortBy=createdAt&sortOrder=1 HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [09/May/2025:20:15:28 +0000] "GET /api/v1/admin/designation?page=1&pageSize=10&sortBy=createdAt&sortOrder=-1 HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [09/May/2025:20:15:29 +0000] "GET /api/v1/admin/designation?page=1&pageSize=10&sortBy=createdAt&sortOrder=-1 HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [09/May/2025:20:15:29 +0000] "GET /api/v1/admin/designation?page=1&pageSize=10&sortBy=createdAt&sortOrder=1 HTTP/1.1" 304 -
