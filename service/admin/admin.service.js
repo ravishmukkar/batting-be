@@ -10,7 +10,7 @@ const { JwtSign, ApiError, Utils } = require("../../Utils");
 const { StatusCodes } = require("http-status-codes");
 const { CONSTANTS } = require("../../Constant");
 const TokenServices = require("../token.service");
-const { createForgotPasswordEmail } = require("../../utils/emailUtils"); 
+const { createForgotPasswordEmail } = require("../../Utils/emailUtils"); 
 const sendMail = require("../../Utils/mailer");
 
 const AdminService = {
