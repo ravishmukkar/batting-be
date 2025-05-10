@@ -195,10 +195,13 @@ const AdminService = {
   },
   GetAllDesig: async (data) => {
     const { search, page=1, pageSize=10, sortBy="createdAt", sortOrder="-1" } = data;
+    console.log(data)
     const offset = (page - 1) * pageSize;
     const sortObject = {};
     let searchQuery;
     if (search) {
+
+
       searchQuery = {
         designation: { $regex: search, $options: "i" }
       };

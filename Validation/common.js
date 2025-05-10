@@ -12,7 +12,7 @@ const CommonSchema = {
     }),
     
     Pagination: Joi.object().keys({
-        search:Joi.string().optional(),
+        search:Joi.string().allow("").optional(),
         page: Joi.string().regex(/^\d+$/).max(10000).optional(),
         pageSize: Joi.string().regex(/^\d+$/).max(1000).optional(),
         sortBy:Joi.string().optional(),
