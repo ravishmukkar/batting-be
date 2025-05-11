@@ -75,9 +75,9 @@ router.get("/master", AdminAuth, CatchAsync(AdminController.GetAllMasters));
 
 /** Get all privilege */
 router.post("/privilege", AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.PRIVILEGES.id,"POST"),CatchAsync(AdminController.AddPrivilege));
-router.get("/privilege/:designation_id", ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.PRIVILEGES.id,"GET"),AdminAuth, CatchAsync(AdminController.GetAllPrivilege));
-router.get("/privilege/:user_id/:program_id",ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.PRIVILEGES.id,"GET"), AdminAuth, CatchAsync(AdminController.GetIndividualPrivilege));
-router.patch("/privilege/:designation_id",ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.PRIVILEGES.id,"PATCH"), AdminAuth, CatchAsync(AdminController.EditPrivilege));
+router.get("/privilege/:designation_id",AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.PRIVILEGES.id,"GET"), CatchAsync(AdminController.GetAllPrivilege));
+router.get("/privilege/:user_id/:program_id",AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.PRIVILEGES.id,"GET") , CatchAsync(AdminController.GetIndividualPrivilege));
+router.patch("/privilege/:designation_id",AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.PRIVILEGES.id,"PATCH"), CatchAsync(AdminController.EditPrivilege));
 
 /** admin routes */
 router.post("/admin", AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.ADMIN.id,"POST"),ValidateRequest(AdminAuthSchema.Signup, "body"), CatchAsync(AdminAuthController.SignUp));

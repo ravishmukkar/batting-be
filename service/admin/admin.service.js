@@ -170,11 +170,7 @@ const AdminService = {
     const emailHtml = createAdminCreateEmail(user.name || "User");
     await sendMail(user.email, "Admin Created", emailHtml);
 
-    const privilige = [
-      // { user_id:user.id, module_id:CONSTANTS.MODULE_TYPE.ADMIN, program_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.DESIGNATION.id, GET:1, POST:1, PATCH:1, DELETE:1 },
-      // { user_id:user.id, module_id:CONSTANTS.MODULE_TYPE.ADMIN, program_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.USER.id, GET:1, POST:1, PATCH:1, DELETE:1 }, 
-    ]
-    await PrivilegeDal.CreatePrivilege(privilige);
+    
     const token = await JwtSign({ email: user.email, _id: user._id });
     user.token.push(token);
     await AdminAuthDal.UpdateAdmin({ _id: user._id }, user);
@@ -184,7 +180,14 @@ const AdminService = {
   AddDesig: async (data) => {
     const uniqueDesignation = await DesigDal.CheckUniqueDesignation({designation: data.designation}); 
     if(uniqueDesignation) throw new ApiError(CONSTANTS_MESSAGES.NAME_EXISTS, StatusCodes.BAD_REQUEST);
-    return await DesigDal.CreateDesig(data);
+    const CreateDesig =  await DesigDal.CreateDesig(data);
+    const privilige = [
+      {  module_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.DESIGNATION.id,designation_id:CreateDesig._id , GET:0, POST:0, PATCH:0, DELETE:0 },
+      {  module_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.PRIVILEGES.id ,designation_id:CreateDesig._id, GET:0, POST:0, PATCH:0, DELETE:0 },
+      {  module_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.ADMIN.id, designation_id:CreateDesig._id, GET:0, POST:0, PATCH:0, DELETE:0 },
+    ]
+    console.log(privilige)
+    return await PrivilegeDal.CreatePrivilege(privilige);
   },
   GetAllDesig: async (data) => {
     const { search, page=1, pageSize=10, sortBy="createdAt", sortOrder="-1" } = data;
@@ -225,7 +228,6 @@ const AdminService = {
   DeleteDesig: async (_id) => await DesigDal.DeleteDesig( {_id, id: null }),
   BulkDeleteDesignations: async (ids) => await DesigDal.BulkDeleteDesignations(ids),
 
-
   /** Get All Masters */
   GetAllMasters : () => CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN,
 
@@ -247,7 +249,6 @@ const AdminService = {
   GetIndividualPrivilege: async (data) => await PrivilegeDal.GetIndividualPrivilege({ program_id : data.program_id, user_id:data.user_id }),
 
   EditPrivilege: async (data, designation_id, module_id) => {
-     console.log(data,'data')
       const bulkOps = data.map(update => {
         const filter = { designation_id, module_id:update.module_id };
         const updateData = {
@@ -261,7 +262,8 @@ const AdminService = {
       return {
         updateOne: {
           filter: filter,
-          update: updateData
+          update: updateData,
+          upsert: true
         }
       };
     });
