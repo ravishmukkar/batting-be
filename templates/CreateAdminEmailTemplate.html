@@ -1,0 +1,48 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f6f8fa;
+        padding: 20px;
+        color: #333;
+    }
+    .container {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 6px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    a.button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        display: inline-block;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+    .footer {
+        margin-top: 40px;
+        font-size: 12px;
+        color: #999;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <h2>Hello ${name},</h2>
+    <p>You have successfully registered as an admin.</p>
+    <p>Here are your credentials:</p>
+    <ul>
+        <li><strong>Email:</strong> ${email}</li>
+        <li><strong>Password:</strong> ${password}</li>
+    </ul>
+    <p>If you didn't register, please ignore this email.</p>
+    <div class="footer">
+        &copy; 2025 Your Company. All rights reserved.
+    </div>
+    </div>
+</body>
+</html>

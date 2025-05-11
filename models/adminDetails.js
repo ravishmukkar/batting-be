@@ -41,6 +41,11 @@ const AdminSchema = new mongoose.Schema(
       type: String,
       default: null, // To store the path or URL of the profile image
     },
+    designation_id: {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "designation",
+        required : true,
+    },
     is_active: {
       type: Boolean,
       default: true, // To indicate if the admin is active or deactivated

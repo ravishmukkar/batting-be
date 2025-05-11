@@ -24,6 +24,8 @@ const CONSTANTS_MESSAGES = {
   ADMIN_INACTIVE: "Admin is inactive",
   MANAGEMENT_USER_NOT_FOUND: "Management user not found in database",
   MANAGEMENT_USER_HAS_ASSIGNED_CLAIMS: "Management user has assigned claims",
+  PRIVILEGE_EXITS : "Privilege already exits",
+
   MANAGEMENT_USER_INACTIVE: "Management user is inactive",
   INVALID_PASSWORD: "Password must contains 1 Uppercase 1 Number and 1 Special Character with length at least 8",
   UNAUTHORIZED: "Not authorized.",

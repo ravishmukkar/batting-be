@@ -10,8 +10,9 @@ const { JwtSign, ApiError, Utils } = require("../../Utils");
 const { StatusCodes } = require("http-status-codes");
 const { CONSTANTS } = require("../../Constant");
 const TokenServices = require("../token.service");
-const { createForgotPasswordEmail } = require("../../Utils/emailUtils"); 
+const { createForgotPasswordEmail,createAdminCreateEmail } = require("../../Utils/emailUtils"); 
 const sendMail = require("../../Utils/mailer");
+const { constants } = require("crypto");
 
 const AdminService = {
 
@@ -156,30 +157,22 @@ const AdminService = {
   },
 
   SignUp: async (data) => {
-    const { email, password, admin_type = CONSTANTS.ADMIN_TYPE.ADMIN, name, phone, country_code } = data;
+    const { email, password, admin_type = CONSTANTS.ADMIN_TYPE.ADMIN, name, phone, country_code,designation_id } = data;
 
     const existingUser = await AdminAuthDal.GetAdmin({ email }, "_id token");
     if (existingUser) throw new ApiError(CONSTANTS_MESSAGES.EMAIL_EXISTS, StatusCodes.CONFLICT);
 
-    const user = await AdminAuthDal.CreateAdmin({ email, password, admin_type, name, phone, country_code });
+    const user = await AdminAuthDal.CreateAdmin({ email, password, admin_type, name, phone, country_code,designation_id });
     // await Utils.sendMail.signup({
     //   name: "Utkarsh Singh Tomar",
     //   email: "ust816@gmail.com",
     // });
+    const emailHtml = createAdminCreateEmail(user.name || "User");
+    await sendMail(user.email, "Admin Created", emailHtml);
+
     const privilige = [
-      { user_id:user.id, module_id:CONSTANTS.MODULE_TYPE.ADMIN, program_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.DESIGNATION.id, GET:1, POST:1, PATCH:1, DELETE:1 },
-      { user_id:user.id, module_id:CONSTANTS.MODULE_TYPE.ADMIN, program_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.USER.id, GET:1, POST:1, PATCH:1, DELETE:1 }, 
-      { user_id:user.id, module_id:CONSTANTS.MODULE_TYPE.ADMIN, program_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.CORPORATE.id, GET:1, POST:1, PATCH:1, DELETE:1 }, 
-      { user_id:user.id, module_id:CONSTANTS.MODULE_TYPE.ADMIN, program_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.CORPORATE_EMPLOYEE.id, GET:1, POST:1, PATCH:1, DELETE:1 }, 
-      { user_id:user.id, module_id:CONSTANTS.MODULE_TYPE.ADMIN, program_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.PLANS.id, GET:1, POST:1, PATCH:1, DELETE:1 }, 
-      { user_id:user.id, module_id:CONSTANTS.MODULE_TYPE.ADMIN, program_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.TESTS.id, GET:1, POST:1, PATCH:1, DELETE:1 }, 
-      { user_id:user.id, module_id:CONSTANTS.MODULE_TYPE.ADMIN, program_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.DOCTORS.id, GET:1, POST:1, PATCH:1, DELETE:1 }, 
-      { user_id:user.id, module_id:CONSTANTS.MODULE_TYPE.ADMIN, program_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.COUPONS.id, GET:1, POST:1, PATCH:1, DELETE:1 }, 
-      { user_id:user.id, module_id:CONSTANTS.MODULE_TYPE.ADMIN, program_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.TC.id, GET:1, POST:1, PATCH:1, DELETE:1 }, 
-      { user_id:user.id, module_id:CONSTANTS.MODULE_TYPE.ADMIN, program_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.SYSTEM.id, GET:1, POST:1, PATCH:1, DELETE:1 }, 
-      { user_id:user.id, module_id:CONSTANTS.MODULE_TYPE.ADMIN, program_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.PRIVILEGES.id, GET:1, POST:1, PATCH:1, DELETE:1 }, 
-      { user_id:user.id, module_id:CONSTANTS.MODULE_TYPE.ADMIN, program_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.AUDIT_LOGS.id, GET:1, POST:1, PATCH:1, DELETE:1 }, 
-      { user_id:user.id, module_id:CONSTANTS.MODULE_TYPE.ADMIN, program_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.LOGIN_LOGS.id, GET:1, POST:1, PATCH:1, DELETE:1 }
+      // { user_id:user.id, module_id:CONSTANTS.MODULE_TYPE.ADMIN, program_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.DESIGNATION.id, GET:1, POST:1, PATCH:1, DELETE:1 },
+      // { user_id:user.id, module_id:CONSTANTS.MODULE_TYPE.ADMIN, program_id:CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.USER.id, GET:1, POST:1, PATCH:1, DELETE:1 }, 
     ]
     await PrivilegeDal.CreatePrivilege(privilige);
     const token = await JwtSign({ email: user.email, _id: user._id });
@@ -195,13 +188,10 @@ const AdminService = {
   },
   GetAllDesig: async (data) => {
     const { search, page=1, pageSize=10, sortBy="createdAt", sortOrder="-1" } = data;
-    console.log(data)
     const offset = (page - 1) * pageSize;
     const sortObject = {};
     let searchQuery;
     if (search) {
-
-
       searchQuery = {
         designation: { $regex: search, $options: "i" }
       };
@@ -233,7 +223,103 @@ const AdminService = {
   },
 
   DeleteDesig: async (_id) => await DesigDal.DeleteDesig( {_id, id: null }),
-  BulkDeleteDesignations: async (ids) => await DesigDal.BulkDeleteDesignations(ids)
+  BulkDeleteDesignations: async (ids) => await DesigDal.BulkDeleteDesignations(ids),
+
+
+  /** Get All Masters */
+  GetAllMasters : () => CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN,
+
+
+  /** Get all privilege services */
+  AddPrivilege: async (data) => {
+    const PrivilegeExist = await PrivilegeDal.GetIndividualPrivilege({module_id:data.module_id,designation_id:data.designation_id});
+    if (PrivilegeExist) throw new ApiError(CONSTANTS_MESSAGES.PRIVILEGE_EXITS, StatusCodes.CONFLICT);
+    return await PrivilegeDal.CreatePrivilege(data);
+  },
+  
+  GetAllPrivilege: async (data) => {  
+    const resp = await PrivilegeDal.GetAllPrivilege({ designation_id : data.designation_id });
+    return {
+      records: resp,     
+    };
+  },
+
+  GetIndividualPrivilege: async (data) => await PrivilegeDal.GetIndividualPrivilege({ program_id : data.program_id, user_id:data.user_id }),
+
+  EditPrivilege: async (data, designation_id, module_id) => {
+     console.log(data,'data')
+      const bulkOps = data.map(update => {
+        const filter = { designation_id, module_id:update.module_id };
+        const updateData = {
+          $set: {
+            POST: update.POST,
+            PATCH: update.PATCH,
+            DELETE: update.DELETE,
+            GET: update.GET
+          }
+        };   
+      return {
+        updateOne: {
+          filter: filter,
+          update: updateData
+        }
+      };
+    });
+  
+    try {
+      return await PrivilegeDal.EditBulkPrivilege(bulkOps);
+    } catch (error) {
+      throw new ApiError(CONSTANTS_MESSAGES.PERMISSION_UPDATE_FAILED, StatusCodes.BAD_REQUEST);
+    }
+  },
+
+
+  /** admin service */
+  GetAllAdmin: async (data) => {
+    const { search, page=1, pageSize=10, sortBy="createdAt", sortOrder="-1" } = data;
+    const offset = (page - 1) * pageSize;
+    const sortObject = {};
+    let searchQuery;
+    if (search) {
+      searchQuery = {
+        email: { $regex: search, $options: "i" },
+        name: { $regex: search, $options: "i" },
+      };
+    } else {
+      searchQuery = {};
+    }
+    sortObject[sortBy] = parseInt(sortOrder);
+    const pagination = { offset, sortObject, pageSize, searchQuery }
+    const resp = await AdminAuthDal.GetAllAdmins(searchQuery, "", pagination);
+    const totalCount = await AdminAuthDal.GetRecordCount(searchQuery);
+    const totalPages = Math.ceil(totalCount / pageSize);
+    return {
+      records: resp,
+      pagination: {
+        totalRecords: totalCount,
+        pageSize: Number(pageSize),
+        totalPages,
+        currentPage: Number(page),
+        nextPage: Number(page) < totalPages ? Number(page) + 1 : null,
+        prevPage: Number(page) > 1 ? Number(page) - 1 : null,
+      },
+    };
+  },
+
+  EditAdmin: async (data,_id) => {
+    return await AdminAuthDal.UpdateAdmin({ _id },data ,{new:false});
+  },
+
+  DeleteAdmin: async (_id) => await AdminAuthDal.DeleteAdmin( {_id, id: null }),
+  BulkDeleteAdmin: async (ids) => await AdminAuthDal.BulkDeleteAdmin(ids),
+
+  EditAdminStatus: async (_id,is_active) => {
+    return await AdminAuthDal.EditAdminStatus({ _id },{is_active} ,{new:false});
+  },
+  EditAdminType: async (_id,admin_type) => {
+    return await AdminAuthDal.EditAdminType({ _id },{admin_type} ,{new:false});
+  },
+
   
 };
 

@@ -2,19 +2,16 @@ const mongoose = require("mongoose");
 
 const PrivilegeSchema = new mongoose.Schema({
 
-    user_id : {
+    designation_id : {
         type : mongoose.Schema.Types.ObjectId,
-        ref : "ManagmentUsers",
+        ref : "designation",
         required : true,
     },
     module_id : {
         type : Number,
         required : true,
     },
-    program_id : {
-        type : Number,
-        required : true,
-    },
+   
     GET : {
         type : Boolean,
         default : true,

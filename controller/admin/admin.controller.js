@@ -11,6 +11,11 @@ const AdminController = {
     ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
   },
  
+
+  GetAllMasters: async (req, res) => {
+    const data = await AdminService.GetAllMasters();
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
  
   GetAllPrivilege: async (req, res) => {
     const data = await AdminService.GetAllPrivilege(req.params);
@@ -28,10 +33,19 @@ const AdminController = {
   },
 
   EditPrivilege: async (req, res) => {
-    const data = await AdminService.EditPrivilege(req.body,req.params.user_id,Number(req.params.module_id));
+    const data = await AdminService.EditPrivilege(req.body,req.params.designation_id,Number(req.params.module_id));
     ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
   },
 
+  EditAdminStatus: async (req, res) => {
+    const data = await AdminService.EditAdminStatus(req.params.id,req.params.is_active);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+  EditAdminType: async (req, res) => {
+    console.log(req)
+    const data = await AdminService.EditAdminType(req.params.id,req.params.admin_type);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
   
   GetEmailTemplate: async (req, res) => {
     const data = await AdminService.GetEmail();
@@ -60,7 +74,24 @@ const AdminController = {
     ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);  
   },
 
-   
+    /** Get all admin */
+  GetAllAdmin: async (req, res) => {
+    const data = await AdminService.GetAllAdmin(req.query);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+
+  EditAdmin: async (req, res) => {
+    const data = await AdminService.EditAdmin(req.body,req.params.id);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+  DeleteAdmin: async (req, res) => {
+    const data = await AdminService.DeleteAdmin(req.params.id);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+  BulkDeleteAdmin: async (req, res) => {
+    const data = await AdminService.BulkDeleteAdmin(req.body.ids);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
 };
 
 module.exports = AdminController;

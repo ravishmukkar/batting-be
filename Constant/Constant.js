@@ -51,7 +51,8 @@ const CONSTANTS = {
   },
 
   ADMIN_TYPE: {
-      ADMIN: 1,
+      SUPERADMIN: 1,
+      ADMIN: 2,
       APPROVER: 2,
       FINANCE: 3
   },
@@ -61,26 +62,14 @@ const CONSTANTS = {
     PROGRAMME : {
       ADMIN : {
         DESIGNATION : { id:1 , value:"Designation Master"},
-        USER : { id:2 , value:"Users Master"},
-        CORPORATE :{ id:3 , value:"Corporate Master"},
-        CORPORATE_EMPLOYEE :{ id:4 , value:"Corporate Subscriber Master"},
-        PLANS : { id:5 , value:"Plans Master"},
-        TESTS : { id:6 , value:"Test Master"},
-        DOCTORS : { id:7 , value:"Doctors Master"},
-        COUPONS : { id:8 , value:"Coupons Master"},
-        TC : { id:9 , value:"Terms & Conditions Master"} ,
-        SYSTEM : { id:10 , value:"System Settings Master"},
-        PRIVILEGES : { id:11 , value:"Privileges Master"},
-        HEALTH_CHECKUP_PLANS : { id:12 , value:"Health Checkup Plan Master"},
-        SPECIALIZATION : { id:13 , value:"Docotrs Specialization"},
+        PRIVILEGES : { id:2 , value:"Privileges Master"},
+        ADMIN : { id:3 , value:"Admin Master"},
+        USER : { id:4 , value:"Users Master"},
+    
         AUDIT_LOGS : { id:30 , value:"Audit Logs"},
         LOGIN_LOGS : { id:31 , value:"Login History"},
       },
-      GENERAL : {
-        APPROVAL : { id:20 , value:"Approval"},
-        CLAIMS : { id:21 , value:"Claims"}
-      }
-    }},
+  }},
 
   DESIGNATIONS : {
     1: { internal_id: 1, name: "MANAGER",  value: "Manager" },

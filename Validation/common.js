@@ -7,6 +7,16 @@ const CommonSchema = {
         id:Joi.string()
     }),
 
+    StatusId: Joi.object().keys({
+        id:Joi.string(),
+        is_active: Joi.number().valid(0, 1).required(),
+    }),
+
+    AdminType: Joi.object().keys({
+        id:Joi.string(),
+        admin_type: Joi.number().valid(1, 2, 3).required(),
+    }),
+
     BulkDeleteIds: Joi.object().keys({
         ids:Joi.array()
     }),
@@ -50,8 +60,6 @@ const CommonSchema = {
         .valid(Joi.ref('password'))
         .required(),
     }),
-
- 
 }
 
 module.exports = CommonSchema;

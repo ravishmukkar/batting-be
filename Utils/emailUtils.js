@@ -13,10 +13,17 @@ const createForgotPasswordEmail = (name, resetLink) => {
     let html = fs.readFileSync(path.join(__dirname, "../templates/forgotPasswordEmailTemplate.html"), "utf-8");
     html = html.replace("{{name}}", name).replace("{{resetLink}}", resetLink);
     return html;
-  };
+};
 
-  module.exports = {
-    createForgotPasswordEmail,
-    createEmailBody
-    // ... other exports
-  };
+const createAdminCreateEmail = (name, resetLink) => {
+    let html = fs.readFileSync(path.join(__dirname, "../templates/CreateAdminEmailTemplate.html"), "utf-8");
+    html = html.replace("{{name}}", name).replace("{{resetLink}}", resetLink);
+    return html;
+};
+
+module.exports = {
+  createForgotPasswordEmail,
+  createEmailBody,
+  createAdminCreateEmail
+  // ... other exports
+};

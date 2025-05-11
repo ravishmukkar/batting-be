@@ -10,7 +10,9 @@ const AdminAuthSchema = {
         .required(),
         name: Joi.string().required(),
         phone: Joi.string().required(),
-        country_code: Joi.string().required()
+        country_code: Joi.string().required(),
+        designation_id : Joi.string(),
+        profile_image : Joi.object().optional()
     }),
 
     Signin: Joi.object().keys({
