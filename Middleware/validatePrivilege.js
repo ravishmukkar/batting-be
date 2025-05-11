@@ -12,7 +12,7 @@ const validatePrivilege = (program_id, requestType) => async (req, res, next) =>
     if(req.admin.admin_type == 1){
       return next();
     }
-    const Permissions = await PrivilegeDal.GetIndividualPrivilege({ user_id:_id, program_id: program_id });
+    const Permissions = await PrivilegeDal.GetIndividualPrivilege({ designation_id:req.admin.designation_id, module_id: program_id });
     
     if (!Permissions || !Permissions[requestType]) {
       throw new ApiError(CONSTANTS_MESSAGES.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);
