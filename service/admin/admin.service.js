@@ -203,6 +203,7 @@ const AdminService = {
     }
     sortObject[sortBy] = parseInt(sortOrder);
     const pagination = { offset, sortObject, pageSize, searchQuery }
+    console.log(searchQuery)
     const resp = await DesigDal.GetAllDesig(searchQuery, "", pagination);
     const totalCount = await DesigDal.GetRecordCount(searchQuery);
     const totalPages = Math.ceil(totalCount / pageSize);
