@@ -74,7 +74,13 @@ const AdminController = {
     ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);  
   },
 
-    /** Get all admin */
+
+   AddVendor: async (req, res) => {
+    const data = await AdminService.AddVendor(req.body);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+
+  /** Get all admin */
   GetAllAdmin: async (req, res) => {
     const data = await AdminService.GetAllAdmin(req.query);
     ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
@@ -90,6 +96,29 @@ const AdminController = {
   },
   BulkDeleteAdmin: async (req, res) => {
     const data = await AdminService.BulkDeleteAdmin(req.body.ids);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+
+  /** Get all vendor */
+  GetAllVendor: async (req, res) => {
+    const data = await AdminService.GetAllVendor(req.query);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+
+  EditVendor: async (req, res) => {
+    const data = await AdminService.EditVendor(req.body,req.params.id);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+  DeleteVendor: async (req, res) => {
+    const data = await AdminService.DeleteVendor(req.params.id);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+  BulkDeleteVendor: async (req, res) => {
+    const data = await AdminService.BulkDeleteVendor(req.body.ids);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+   EditVendorStatus: async (req, res) => {
+    const data = await AdminService.EditVendorStatus(req.params.id,req.params.is_active);
     ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
   },
 };

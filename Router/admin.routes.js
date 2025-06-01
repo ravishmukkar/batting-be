@@ -88,6 +88,15 @@ router.delete("/bulk-admin-delete", AdminAuth, ValidatePrivilege(CONSTANTS.PRIVI
 router.patch("/admin/status/:id/:is_active",ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.ADMIN.id,"PATCH"), AdminAuth,ValidateRequest(CommonSchema.StatusId, "params"), CatchAsync(AdminController.EditAdminStatus));
 router.patch("/admin/admin_type/:id/:admin_type", AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.ADMIN.id,"PATCH"),ValidateRequest(CommonSchema.AdminType, "params"), CatchAsync(AdminController.EditAdminType));
 
+
+/** admin routes */
+router.post("/vendor", AdminAuth,ValidateRequest(AdminAuthSchema.vendor, "body"), CatchAsync(AdminController.AddVendor));
+router.get("/vendor", AdminAuth,  ValidateRequest(CommonSchema.Pagination, "query"), CatchAsync(AdminController.GetAllVendor));
+router.patch("/vendor/:id", AdminAuth,ValidateRequest(CommonSchema.ParamsId, "params"), CatchAsync(AdminController.EditVendor));
+router.delete("/vendor/:id", AdminAuth,ValidateRequest(CommonSchema.ParamsId, "params"), CatchAsync(AdminController.DeleteVendor));
+router.delete("/bulk-vendor-delete", AdminAuth, ValidateRequest(CommonSchema.BulkDeleteIds, "body"), CatchAsync(AdminController.BulkDeleteVendor));
+router.patch("/vendor/status/:id/:is_active",AdminAuth,ValidateRequest(CommonSchema.StatusId, "params"), CatchAsync(AdminController.EditVendorStatus));
+
 router.get("/email-settings",  CatchAsync(AdminController.GetEmailTemplate));
 router.patch("/email-settings/:id", AdminAuth, ValidateRequest(CommonSchema.ParamsId, "params"), ValidateRequest(EmailSchema.Edit, "body"), CatchAsync(AdminController.EditEmailTemplate));
 

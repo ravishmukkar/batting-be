@@ -1,7 +1,9 @@
 const { adminDetails } = require("../../models");
 
 const AdminAuthDal = {
-  GetAdmin: async (query, params) => await adminDetails.findOne(query).select(params),
+  GetAdmin: async (query, params) => {
+    return await adminDetails.findOne(query)
+  },
   
   GetAllAdmin: async (query, params) => await adminDetails.find().select(),
   GetAllAdmins: async (query, params,pagination) => {

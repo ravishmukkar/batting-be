@@ -3,6 +3,7 @@ const dayjs = require("dayjs");
 const { 
   AdminAuthDal, 
   DesigDal, 
+  VendorDal,
   PrivilegeDal,
 } = require("../../DAL");
 const { CONSTANTS_MESSAGES } = require("../../Helper");
@@ -291,6 +292,7 @@ const AdminService = {
     } else {
       searchQuery = {};
     }
+   
     sortObject[sortBy] = parseInt(sortOrder);
     const pagination = { offset, sortObject, pageSize, searchQuery }
     const resp = await AdminAuthDal.GetAllAdmins(searchQuery, "", pagination);
@@ -323,6 +325,71 @@ const AdminService = {
     return await AdminAuthDal.EditAdminType({ _id },{admin_type} ,{new:false});
   },
 
+  /** vendor service */
+
+  AddVendor: async (data) => {
+    const VendorExist = await VendorDal.GetVendor({$or: [
+      { username: data.username },
+      { email: data.email }
+    ]});
+    if (VendorExist) throw new ApiError(CONSTANTS_MESSAGES.USER_EXISTS, StatusCodes.CONFLICT);
+    return await VendorDal.CreateVendor(data);
+  },
+
+  GetAllVendor: async (data) => {
+    const { search, page=1, pageSize=10, sortBy="createdAt", sortOrder="-1" } = data;
+    const offset = (page - 1) * pageSize;
+    const sortObject = {};
+    let searchQuery;
+    if (search) {
+      searchQuery = {
+        $or: [
+          { email: { $regex: search, $options: "i" },},
+          { name: { $regex: search, $options: "i" },},
+          { username: { $regex: search, $options: "i" },}
+        ]
+      };
+    } else {
+      searchQuery = {};
+    }
+
+    sortObject[sortBy] = parseInt(sortOrder);
+    const pagination = { offset, sortObject, pageSize }
+    const resp = await VendorDal.GetAllVendor(searchQuery, "", pagination);
+    const totalCount = await VendorDal.GetRecordCount(searchQuery);
+    const totalPages = Math.ceil(totalCount / pageSize);
+    return {
+      records: resp,
+      pagination: {
+        totalRecords: totalCount,
+        pageSize: Number(pageSize),
+        totalPages,
+        currentPage: Number(page),
+        nextPage: Number(page) < totalPages ? Number(page) + 1 : null,
+        prevPage: Number(page) > 1 ? Number(page) - 1 : null,
+      },
+    };
+  },
+
+  EditVendor: async (data,_id) => {
+    const findVendor = await VendorDal.GetVendor({ _id });
+    if(!findVendor) throw new ApiError(CONSTANTS_MESSAGES.ID_NOT_FOUND, StatusCodes.BAD_REQUEST);
+    const findUniqEmail = await VendorDal.GetVendor({ email : data.email , _id : { $ne : _id } });
+    if(findUniqEmail) throw new ApiError(CONSTANTS_MESSAGES.EMAIL_EXISTS, StatusCodes.BAD_REQUEST);
+    const findUniqUserName = await VendorDal.GetVendor({ username : data.username , _id : { $ne : _id } });
+    if(findUniqUserName) throw new ApiError(CONSTANTS_MESSAGES.USER_EXISTS, StatusCodes.BAD_REQUEST);
+    return await VendorDal.UpdateVendor({ _id },data ,{new:false});
+  },
+
+  DeleteVendor: async (_id) => await VendorDal.DeleteVendor( {_id, id: null }),
+  BulkDeleteVendor: async (ids) => await VendorDal.BulkDeleteVendor(ids),
+
+  EditVendorStatus: async (_id,is_active) => {
+    return await VendorDal.EditVendorStatus({ _id },{is_active} ,{new:false});
+  },
+  EditVendorType: async (_id,admin_type) => {
+    return await VendorDal.EditVendorType({ _id },{admin_type} ,{new:false});
+  },
   
 };
 

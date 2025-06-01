@@ -45,6 +45,22 @@ const AdminAuthSchema = {
             'any.only': 'Confirm password must match password'
         })
     }),
+
+    vendor : Joi.object({
+        email: Joi.string().email().regex(CONSTANTS.REGEX.EMAIL).required(),
+        password: Joi.string().required(),
+        confirm_password: Joi.string()
+        .valid(Joi.ref('password'))
+        .required(),
+        username: Joi.string().required(),
+        name: Joi.string().required(),
+         phone: Joi.string()
+        .pattern(/^[6-9]\d{9}$/) // Indian mobile number validation
+        .required()
+        .messages({
+            'string.pattern.base': 'Phone number must be a valid 10-digit mobile number starting with 6-9',
+        }),
+    })
 }
 
 module.exports = AdminAuthSchema

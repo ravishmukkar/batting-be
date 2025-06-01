@@ -4,7 +4,7 @@ const PrivilegeDal = require("./admin/privilege.dal");
 const EmailDal = require("./admin/email.dal");
 const DesigDal = require("./admin/desig.dal");
 const AuditTrail = require("./admin/auditTrail.dal");
-
+const VendorDal = require("./admin/vendor.dal")
 
 module.exports = {
     AdminAuthDal,
@@ -12,5 +12,6 @@ module.exports = {
     EmailDal,
     TokenActions,
     DesigDal,
-    AuditTrail
+    AuditTrail,
+    VendorDal
 };
