@@ -21,6 +21,14 @@ const AdminSchema = {
         startDate: Joi.date().iso().less('now').optional(),      
         endDate: Joi.date().iso().greater(Joi.ref('startDate')).optional(), 
     }),
+
+    AddCategory: Joi.object().keys({
+        category_name: Joi.string().required(),        
+    }),
+
+    AddEvent: Joi.object().keys({
+        event_name: Joi.string().required(),        
+    }),
    
 }
 

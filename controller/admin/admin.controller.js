@@ -33,7 +33,7 @@ const AdminController = {
   },
 
   EditPrivilege: async (req, res) => {
-    const data = await AdminService.EditPrivilege(req.body,req.params.designation_id,Number(req.params.module_id));
+    const data = await AdminService.EditPrivilege(req.body,req.params.admin_id,Number(req.params.module_id));
     ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
   },
 
@@ -104,7 +104,6 @@ const AdminController = {
     const data = await AdminService.GetAllVendor(req.query);
     ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
   },
-
   EditVendor: async (req, res) => {
     const data = await AdminService.EditVendor(req.body,req.params.id);
     ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
@@ -119,6 +118,61 @@ const AdminController = {
   },
    EditVendorStatus: async (req, res) => {
     const data = await AdminService.EditVendorStatus(req.params.id,req.params.is_active);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+
+  /** Get all category */
+  AddCategory: async (req, res) => {
+    req.body.created_by = req?.admin?._id
+    const data = await AdminService.AddCategory(req.body);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+  GetAllCategory: async (req, res) => {
+    const data = await AdminService.GetAllCategory(req.query);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+  EditCategory: async (req, res) => {
+    const data = await AdminService.EditCategory(req.body,req.params.id);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+  DeleteCategory: async (req, res) => {
+    const data = await AdminService.DeleteCategory(req.params.id);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+  BulkDeleteCategory: async (req, res) => {
+    const data = await AdminService.BulkDeleteCategory(req.body.ids);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+   EditCategoryStatus: async (req, res) => {
+    const data = await AdminService.EditCategoryStatus(req.params.id,req.params.is_active);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+
+   /** Get all category */
+  AddEvent: async (req, res) => {
+    req.body.created_by = req?.admin?._id
+    req.body.category_id = "683c0990c9fac4bd78aa360b";
+    const data = await AdminService.AddEvent(req.body);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+  GetAllEvent: async (req, res) => {
+    const data = await AdminService.GetAllEvent(req.query);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+  EditEvent: async (req, res) => {
+    const data = await AdminService.EditEvent(req.body,req.params.id);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+  DeleteEvent: async (req, res) => {
+    const data = await AdminService.DeleteEvent(req.params.id);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+  BulkDeleteEvent: async (req, res) => {
+    const data = await AdminService.BulkDeleteEvent(req.body.ids);
+    ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
+  },
+  EditEventStatus: async (req, res) => {
+    const data = await AdminService.EditEventStatus(req.params.id,req.params.is_active);
     ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
   },
 };

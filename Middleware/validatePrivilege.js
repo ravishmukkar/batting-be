@@ -12,10 +12,14 @@ const validatePrivilege = (program_id, requestType) => async (req, res, next) =>
     if(req.admin.admin_type == 1){
       return next();
     }
-    const Permissions = await PrivilegeDal.GetIndividualPrivilege({ designation_id:req.admin.designation_id, module_id: program_id });
+    const Permissions = await PrivilegeDal.GetIndividualPrivilege({ admin_id:_id, module_id: program_id });
     
     if (!Permissions || !Permissions[requestType]) {
-      throw new ApiError(CONSTANTS_MESSAGES.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);
+      // throw new ApiError(CONSTANTS_MESSAGES.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);
+       res.status(StatusCodes.UNAUTHORIZED|| StatusCodes.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        message: CONSTANTS_MESSAGES.UNAUTHORIZED || CONSTANTS_MESSAGES.INTERNAL_SERVER_ERROR,
+      });
     } else {
       console.log("Permission granted");
       next(); 

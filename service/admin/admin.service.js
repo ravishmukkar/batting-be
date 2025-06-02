@@ -5,6 +5,8 @@ const {
   DesigDal, 
   VendorDal,
   PrivilegeDal,
+  CategoryDal,
+  EventDal
 } = require("../../DAL");
 const { CONSTANTS_MESSAGES } = require("../../Helper");
 const { JwtSign, ApiError, Utils } = require("../../Utils");
@@ -242,7 +244,7 @@ const AdminService = {
   },
   
   GetAllPrivilege: async (data) => {  
-    const resp = await PrivilegeDal.GetAllPrivilege({ designation_id : data.designation_id });
+    const resp = await PrivilegeDal.GetAllPrivilege({ admin_id : data.admin_id });
     return {
       records: resp,     
     };
@@ -250,9 +252,9 @@ const AdminService = {
 
   GetIndividualPrivilege: async (data) => await PrivilegeDal.GetIndividualPrivilege({ program_id : data.program_id, user_id:data.user_id }),
 
-  EditPrivilege: async (data, designation_id, module_id) => {
-      const bulkOps = data.map(update => {
-        const filter = { designation_id, module_id:update.module_id };
+  EditPrivilege: async (data, admin_id, module_id) => {
+    const bulkOps = data.map(update => {
+        const filter = { admin_id, module_id:update.module_id };
         const updateData = {
           $set: {
             POST: update.POST,
@@ -270,6 +272,8 @@ const AdminService = {
       };
     });
   
+    console.log(bulkOps)
+
     try {
       return await PrivilegeDal.EditBulkPrivilege(bulkOps);
     } catch (error) {
@@ -312,6 +316,11 @@ const AdminService = {
   },
 
   EditAdmin: async (data,_id) => {
+    const findAdmin = await AdminAuthDal.GetAdmin({ _id });
+    if(!findAdmin) throw new ApiError(CONSTANTS_MESSAGES.ID_NOT_FOUND, StatusCodes.BAD_REQUEST);
+    const findUniqGame = await AdminAuthDal.GetAdmin({ email : data.email , _id : { $ne : _id } });
+    if(findUniqGame) throw new ApiError(CONSTANTS_MESSAGES.EMAIL_EXISTS, StatusCodes.BAD_REQUEST);
+   
     return await AdminAuthDal.UpdateAdmin({ _id },data ,{new:false});
   },
 
@@ -326,7 +335,6 @@ const AdminService = {
   },
 
   /** vendor service */
-
   AddVendor: async (data) => {
     const VendorExist = await VendorDal.GetVendor({$or: [
       { username: data.username },
@@ -390,6 +398,120 @@ const AdminService = {
   EditVendorType: async (_id,admin_type) => {
     return await VendorDal.EditVendorType({ _id },{admin_type} ,{new:false});
   },
+
+  /** category service */
+  AddCategory: async (data) => {
+    const categoryExist = await CategoryDal.GetCategory({$or: [
+      { category_name: data.category_name },
+    ]});
+    if (categoryExist) throw new ApiError(CONSTANTS_MESSAGES.USER_EXISTS, StatusCodes.CONFLICT);
+    return await CategoryDal.CreateCategory(data);
+  },
+
+  GetAllCategory: async (data) => {
+    const { search, page=1, pageSize=10, sortBy="createdAt", sortOrder="-1" } = data;
+    const offset = (page - 1) * pageSize;
+    const sortObject = {};
+    let searchQuery;
+    if (search) {
+      searchQuery = {
+        $or: [
+          { category_name: { $regex: search, $options: "i" },},
+        ]
+      };
+    } else {
+      searchQuery = {};
+    }
+
+    sortObject[sortBy] = parseInt(sortOrder);
+    const pagination = { offset, sortObject, pageSize }
+    const resp = await CategoryDal.GetAllCategory(searchQuery, "", pagination);
+    const totalCount = await CategoryDal.GetRecordCount(searchQuery);
+    const totalPages = Math.ceil(totalCount / pageSize);
+    return {
+      records: resp,
+      pagination: {
+        totalRecords: totalCount,
+        pageSize: Number(pageSize),
+        totalPages,
+        currentPage: Number(page),
+        nextPage: Number(page) < totalPages ? Number(page) + 1 : null,
+        prevPage: Number(page) > 1 ? Number(page) - 1 : null,
+      },
+    };
+  },
+
+  EditCategory: async (data,_id) => {
+    const findCategory = await CategoryDal.GetCategory({ _id });
+    if(!findCategory) throw new ApiError(CONSTANTS_MESSAGES.ID_NOT_FOUND, StatusCodes.BAD_REQUEST);
+    const findUniqCategory = await CategoryDal.GetCategory({ category_name : data.category_name , _id : { $ne : _id } });
+    if(findUniqCategory) throw new ApiError(CONSTANTS_MESSAGES.EMAIL_EXISTS, StatusCodes.BAD_REQUEST);
+   
+    return await CategoryDal.UpdateCategory({ _id },data ,{new:false});
+  },
+
+  DeleteCategory: async (_id) => await CategoryDal.DeleteCategory( {_id, id: null }),
+  BulkDeleteCategory: async (ids) => await CategoryDal.BulkDeleteCategory(ids),
+
+  EditCategoryStatus: async (_id,is_active) => {
+    return await CategoryDal.EditCategoryStatus({ _id },{is_active} ,{new:false});
+  },
+
+   /** Event service */
+  AddEvent: async (data) => {
+    const gameExist = await EventDal.GetEvent({$or: [
+      { event_name: data.event_name },
+    ]});
+
+    if (gameExist) throw new ApiError(CONSTANTS_MESSAGES.USER_EXISTS, StatusCodes.CONFLICT);
+    return await EventDal.CreateEvent(data);
+  },
+  GetAllEvent: async (data) => {
+    const { search, page=1, pageSize=10, sortBy="createdAt", sortOrder="-1" } = data;
+    const offset = (page - 1) * pageSize;
+    const sortObject = {};
+    let searchQuery;
+    if (search) {
+      searchQuery = {
+        $or: [
+          { event_name : { $regex: search, $options: "i" },},
+        ]
+      };
+    } else {
+      searchQuery = {};
+    }
+
+    sortObject[sortBy] = parseInt(sortOrder);
+    const pagination = { offset, sortObject, pageSize }
+    const resp = await EventDal.GetAllEvent(searchQuery, "", pagination);
+    const totalCount = await EventDal.GetRecordCount(searchQuery);
+    const totalPages = Math.ceil(totalCount / pageSize);
+    return {
+      records: resp,
+      pagination: {
+        totalRecords: totalCount,
+        pageSize: Number(pageSize),
+        totalPages,
+        currentPage: Number(page),
+        nextPage: Number(page) < totalPages ? Number(page) + 1 : null,
+        prevPage: Number(page) > 1 ? Number(page) - 1 : null,
+      },
+    };
+  },
+  EditEvent: async (data,_id) => {
+    const findGame = await EventDal.GetEvent({ _id });
+    if(!findGame) throw new ApiError(CONSTANTS_MESSAGES.ID_NOT_FOUND, StatusCodes.BAD_REQUEST);
+    const findUniqGame = await EventDal.GetEvent({ name : data.event_name , _id : { $ne : _id } });
+    if(findUniqGame) throw new ApiError(CONSTANTS_MESSAGES.EMAIL_EXISTS, StatusCodes.BAD_REQUEST);
+   
+    return await EventDal.UpdateEvent({ _id },data ,{new:false});
+  },
+  DeleteEvent: async (_id) => await EventDal.DeleteEvent( {_id, id: null }),
+  BulkDeleteEvent: async (ids) => await EventDal.BulkDeleteEvent(ids),
+  EditEventStatus: async (_id,is_active) => {
+    return await EventDal.EditEventStatus({ _id },{is_active} ,{new:false});
+  },
+  
   
 };
 

@@ -64,20 +64,20 @@ router.post("/forgotpassword", ValidateRequest(AdminAuthSchema.ForgotPassword, "
 router.post("/UpdatePassword/:token",  CatchAsync(AdminAuthController.ResetForgotPassword))
 
 
-router.post("/designation", AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.DESIGNATION.id,"POST"), ValidateRequest(AdminSchema.AddDesignation, "body"), CatchAsync(DesigController.Add));
-router.get("/designation", AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.DESIGNATION.id,"GET"),ValidateRequest(CommonSchema.Pagination, "query"),CatchAsync(DesigController.GetAll));
-router.patch("/designation/:id", AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.DESIGNATION.id,"PATCH"), ValidateRequest(CommonSchema.ParamsId, "params") ,ValidateRequest(AdminSchema.EditDesignation, "body") , CatchAsync(DesigController.Edit));
-router.delete("/designation/:id", AdminAuth,  ValidateRequest(CommonSchema.ParamsId, "params"), CatchAsync(DesigController.Delete));
-router.delete("/bulk-designation-delete", AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.DESIGNATION.id,"DELETE"), ValidateRequest(CommonSchema.BulkDeleteIds, "body"), CatchAsync(DesigController.BulkDeleteDesignations));
+// router.post("/designation", AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.DESIGNATION.id,"POST"), ValidateRequest(AdminSchema.AddDesignation, "body"), CatchAsync(DesigController.Add));
+// router.get("/designation", AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.DESIGNATION.id,"GET"),ValidateRequest(CommonSchema.Pagination, "query"),CatchAsync(DesigController.GetAll));
+// router.patch("/designation/:id", AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.DESIGNATION.id,"PATCH"), ValidateRequest(CommonSchema.ParamsId, "params") ,ValidateRequest(AdminSchema.EditDesignation, "body") , CatchAsync(DesigController.Edit));
+// router.delete("/designation/:id", AdminAuth,  ValidateRequest(CommonSchema.ParamsId, "params"), CatchAsync(DesigController.Delete));
+// router.delete("/bulk-designation-delete", AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.DESIGNATION.id,"DELETE"), ValidateRequest(CommonSchema.BulkDeleteIds, "body"), CatchAsync(DesigController.BulkDeleteDesignations));
 
 /** Get all masterd */
 router.get("/master", AdminAuth, CatchAsync(AdminController.GetAllMasters));
 
 /** Get all privilege */
 router.post("/privilege", AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.PRIVILEGES.id,"POST"),CatchAsync(AdminController.AddPrivilege));
-router.get("/privilege/:designation_id",AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.PRIVILEGES.id,"GET"), CatchAsync(AdminController.GetAllPrivilege));
+router.get("/privilege/:admin_id",AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.PRIVILEGES.id,"GET"), CatchAsync(AdminController.GetAllPrivilege));
 router.get("/privilege/:user_id/:program_id",AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.PRIVILEGES.id,"GET") , CatchAsync(AdminController.GetIndividualPrivilege));
-router.patch("/privilege/:designation_id",AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.PRIVILEGES.id,"PATCH"), CatchAsync(AdminController.EditPrivilege));
+router.patch("/privilege/:admin_id",AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.PRIVILEGES.id,"PATCH"), CatchAsync(AdminController.EditPrivilege));
 
 /** admin routes */
 router.post("/admin", AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.ADMIN.id,"POST"),ValidateRequest(AdminAuthSchema.Signup, "body"), CatchAsync(AdminAuthController.SignUp));
@@ -89,13 +89,31 @@ router.patch("/admin/status/:id/:is_active",ValidatePrivilege(CONSTANTS.PRIVILEG
 router.patch("/admin/admin_type/:id/:admin_type", AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.ADMIN.id,"PATCH"),ValidateRequest(CommonSchema.AdminType, "params"), CatchAsync(AdminController.EditAdminType));
 
 
-/** admin routes */
+/** vendor routes */
 router.post("/vendor", AdminAuth,ValidateRequest(AdminAuthSchema.vendor, "body"), CatchAsync(AdminController.AddVendor));
 router.get("/vendor", AdminAuth,  ValidateRequest(CommonSchema.Pagination, "query"), CatchAsync(AdminController.GetAllVendor));
 router.patch("/vendor/:id", AdminAuth,ValidateRequest(CommonSchema.ParamsId, "params"), CatchAsync(AdminController.EditVendor));
 router.delete("/vendor/:id", AdminAuth,ValidateRequest(CommonSchema.ParamsId, "params"), CatchAsync(AdminController.DeleteVendor));
 router.delete("/bulk-vendor-delete", AdminAuth, ValidateRequest(CommonSchema.BulkDeleteIds, "body"), CatchAsync(AdminController.BulkDeleteVendor));
 router.patch("/vendor/status/:id/:is_active",AdminAuth,ValidateRequest(CommonSchema.StatusId, "params"), CatchAsync(AdminController.EditVendorStatus));
+
+
+/** category routes */
+router.post("/category", AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.CATEGORY.id,"POST"),ValidateRequest(AdminSchema.AddCategory, "body"), CatchAsync(AdminController.AddCategory));
+router.get("/category", AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.CATEGORY.id,"GET"),  ValidateRequest(CommonSchema.Pagination, "query"), CatchAsync(AdminController.GetAllCategory));
+router.patch("/category/:id", AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.CATEGORY.id,"PATCH"),ValidateRequest(CommonSchema.ParamsId, "params"), CatchAsync(AdminController.EditCategory));
+router.delete("/category/:id", AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.CATEGORY.id,"DELETE"),ValidateRequest(CommonSchema.ParamsId, "params"), CatchAsync(AdminController.DeleteCategory));
+router.delete("/bulk-category-delete", AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.CATEGORY.id,"DELETE"), ValidateRequest(CommonSchema.BulkDeleteIds, "body"), CatchAsync(AdminController.BulkDeleteCategory));
+router.patch("/category/status/:id/:is_active",ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.CATEGORY.id,"PATCH"),AdminAuth,ValidateRequest(CommonSchema.StatusId, "params"), CatchAsync(AdminController.EditCategoryStatus));
+
+/** events routes */
+router.post("/event", AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.EVENT.id,"POST"),ValidateRequest(AdminSchema.AddEvent, "body"), CatchAsync(AdminController.AddEvent));
+router.get("/event", AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.EVENT.id,"GET"), ValidateRequest(CommonSchema.Pagination, "query"), CatchAsync(AdminController.GetAllEvent));
+router.patch("/event/:id", AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.EVENT.id,"PATCH"),ValidateRequest(CommonSchema.ParamsId, "params"), CatchAsync(AdminController.EditEvent));
+router.delete("/event/:id", AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.EVENT.id,"DELETE"),ValidateRequest(CommonSchema.ParamsId, "params"), CatchAsync(AdminController.DeleteEvent));
+router.delete("/bulk-event-delete", AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.EVENT.id,"DELETE"), ValidateRequest(CommonSchema.BulkDeleteIds, "body"), CatchAsync(AdminController.BulkDeleteEvent));
+router.patch("/event/status/:id/:is_active",AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.EVENT.id,"PATCH"),ValidateRequest(CommonSchema.StatusId, "params"), CatchAsync(AdminController.EditEventStatus));
+
 
 router.get("/email-settings",  CatchAsync(AdminController.GetEmailTemplate));
 router.patch("/email-settings/:id", AdminAuth, ValidateRequest(CommonSchema.ParamsId, "params"), ValidateRequest(EmailSchema.Edit, "body"), CatchAsync(AdminController.EditEmailTemplate));

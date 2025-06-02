@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 
 const PrivilegeSchema = new mongoose.Schema({
 
-    designation_id : {
+    admin_id : {
         type : mongoose.Schema.Types.ObjectId,
-        ref : "designation",
+        ref : "adminDetails",
         required : true,
     },
     module_id : {
@@ -14,12 +14,12 @@ const PrivilegeSchema = new mongoose.Schema({
    
     GET : {
         type : Boolean,
-        default : true,
+        default : false,
         required : true,
     },
     POST : {
         type : Boolean,
-        default : true,
+        default : false,
         required : true,
     },
     PATCH : {

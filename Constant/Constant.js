@@ -61,11 +61,13 @@ const CONSTANTS = {
   PRIVILEGE : {
     PROGRAMME : {
       ADMIN : {
-        DESIGNATION : { id:1 , value:"Designation Master"},
+        // DESIGNATION : { id:1 , value:"Designation Master"},
         PRIVILEGES : { id:2 , value:"Privileges Master"},
         ADMIN : { id:3 , value:"Admin Master"},
         USER : { id:4 , value:"Users Master"},
-    
+        // VENDOR : { id:5 , value:"Vendor Master"},
+        CATEGORY : { id:6 , value:"Category Master"},
+        EVENT : { id:7 , value:"Event Master"},
         AUDIT_LOGS : { id:30 , value:"Audit Logs"},
         LOGIN_LOGS : { id:31 , value:"Login History"},
       },
