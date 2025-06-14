@@ -24,6 +24,7 @@ const AdminAuth = async (req, res, next) => {
     const { _id } = decodedToken;
     const admin = await AdminAuthDal.GetAdmin({ _id });
 
+
     if (!admin) {
       throw new ApiError(CONSTANTS_MESSAGES.ADMIN_NOT_FOUND, StatusCodes.NOT_FOUND);
     }

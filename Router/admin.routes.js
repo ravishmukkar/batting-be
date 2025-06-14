@@ -85,7 +85,7 @@ router.get("/admin", AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.
 router.patch("/admin/:id", AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.ADMIN.id,"PATCH"),ValidateRequest(CommonSchema.ParamsId, "params"), CatchAsync(AdminController.EditAdmin));
 router.delete("/admin/:id", AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.ADMIN.id,"DELETE"),ValidateRequest(CommonSchema.ParamsId, "params"), CatchAsync(AdminController.DeleteAdmin));
 router.delete("/bulk-admin-delete", AdminAuth, ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.ADMIN.id,"DELETE"), ValidateRequest(CommonSchema.BulkDeleteIds, "body"), CatchAsync(AdminController.BulkDeleteAdmin));
-router.patch("/admin/status/:id/:is_active",ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.ADMIN.id,"PATCH"), AdminAuth,ValidateRequest(CommonSchema.StatusId, "params"), CatchAsync(AdminController.EditAdminStatus));
+router.patch("/admin/status/:id/:is_active",AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.ADMIN.id,"PATCH"), AdminAuth,ValidateRequest(CommonSchema.StatusId, "params"), CatchAsync(AdminController.EditAdminStatus));
 router.patch("/admin/admin_type/:id/:admin_type", AdminAuth,ValidatePrivilege(CONSTANTS.PRIVILEGE.PROGRAMME.ADMIN.ADMIN.id,"PATCH"),ValidateRequest(CommonSchema.AdminType, "params"), CatchAsync(AdminController.EditAdminType));
 
 

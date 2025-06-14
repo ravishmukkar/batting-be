@@ -12,6 +12,8 @@ const validatePrivilege = (program_id, requestType) => async (req, res, next) =>
     if(req.admin.admin_type == 1){
       return next();
     }
+
+   
     const Permissions = await PrivilegeDal.GetIndividualPrivilege({ admin_id:_id, module_id: program_id });
     
     if (!Permissions || !Permissions[requestType]) {

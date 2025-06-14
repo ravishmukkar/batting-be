@@ -42,7 +42,7 @@ const AdminController = {
     ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
   },
   EditAdminType: async (req, res) => {
-    console.log(req)
+    console.log(req,'dd')
     const data = await AdminService.EditAdminType(req.params.id,req.params.admin_type);
     ResponseHandler(res, StatusCodes.OK, data, true, CONSTANTS_MESSAGES.SUCCESS);
   },
